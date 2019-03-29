@@ -3,7 +3,7 @@ package ejercicios;
 import java.util.Scanner;
 
 /**
- * Clase 4
+ * Clase 3
  * @author guido
  */
 public class Ejercicio10 {
@@ -57,12 +57,15 @@ public class Ejercicio10 {
                         System.out.println("No se puede dividir por cero. Resultado: " + resultado);
                     }
                     break;
+                default:
+
+                    System.out.printf("no existe el operador");
+                    break;
             }
             System.out.println("Ingrese una operacion");
             System.out.println("Operadores validos: + _ - _ / _ * _ %");
             operacion = scan.next();
         }
-
 
         System.out.println("La calculadora finalizo");
     }
