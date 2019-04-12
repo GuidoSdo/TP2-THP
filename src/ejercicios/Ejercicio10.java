@@ -3,7 +3,6 @@ package ejercicios;
 import java.util.Scanner;
 
 /**
- * Clase 3
  * @author guido
  */
 public class Ejercicio10 {

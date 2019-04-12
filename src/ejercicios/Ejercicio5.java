@@ -2,6 +2,9 @@ package ejercicios;
 
 import java.util.Scanner;
 
+/**
+ * @author guido
+ */
 public class Ejercicio5 {
     private static int numeroDeCorredorIngresado;
     private static int corredorMasRapido;
@@ -55,6 +58,13 @@ public class Ejercicio5 {
 
     }
 
+    /**
+     * Devuelve la cantidad total en segundos
+     * @param horas
+     * @param minutos
+     * @param segundos
+     * @return segundos totales
+     */
     private static int devolverSegundos(int horas, int minutos, int segundos) {
 
         int horasASegundoTotal = horas * 3600;
@@ -63,6 +73,5 @@ public class Ejercicio5 {
         int segundosTotales = horasASegundoTotal + minutosASegundosTotal + segundos;
         return segundosTotales;
     }
-
 
 }

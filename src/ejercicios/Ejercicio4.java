@@ -2,6 +2,9 @@ package ejercicios;
 
 import java.util.Scanner;
 
+/**
+ * @author guido
+ */
 public class Ejercicio4 {
     public static void main(String[] args) {
 
