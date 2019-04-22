@@ -30,7 +30,7 @@ public class Ejercicio6 {
      */
     private  static int calcularProducto (int primerNumero, int segundoNumero){
        int contador =1;
-        while (contador<= segundoNumero) {
+        while (contador <= segundoNumero) {
             producto = producto + primerNumero;
             contador++;
         }
