@@ -7,14 +7,15 @@ import java.util.Scanner;
  */
 public class Ejercicio11 {
 
-    private static final float facturacionTotal = 0;
+    private static  float facturacionTotal = 0;
     private static int cantidadEmpresas;
 
     private static float facturacionMensual;
     private static float resumenDeViaje;
     private static float promedioPagadoPorEmpresa;
-    private static float valorFacturaMasCara;
+    private static float facturacionMayor = 0;
     private static String nombreEmpresa;
+    private static String nombreEmpresaConFacturacionMasAlta;
     private static int cantidadViajes;
     private static Scanner scanner = new Scanner(System.in);
 
@@ -25,71 +26,78 @@ public class Ejercicio11 {
     private static final int VIAJES_ADICIONALES_PARA_PROMOCIONAR = 30;
     private static final int VIAJES_MAXIMOS = 1000;
     private static final int DESCUENTO_PROMOCION = 10;
-    private static boolean hayDescuento = false;
-    private static String selector;
-
+    private static boolean finalizarOperacion = false;
+    private static int contador = 0;
     public static void main(String[] args) {
 
-        System.out.println("Elija entre las opciones dadas que desea hacer: ");
-        System.out.println("A - Ingresar Facturacion de una empresa");
-        System.out.println("B - Calcular Facturacion total de las empresas ingresadas");
-        selector = scanner.next();
+        System.out.println("Sistema de facturacion mensual");
 
-        // MENU
-        while (!selector.equals("F")) {
-            switch (selector) {
+        while(finalizarOperacion != true){
+            contador++;
 
-                case "A":
-                    calcularFacturacionMensualEmpresa();
-                    break;
-                case "B":
+            System.out.println("Ingrese los datos del resumen n°" + contador);
 
-                default:
-                    System.out.println("No existe tal opcion");
-                    break;
+            System.out.println("Nombre de empresa: ");
+            nombreEmpresa = scanner.next();
+            cantidadViajes = ingresarResumenDeViaje();
+
+            if(cantidadViajes != 0) {
+                facturacionMensual = calcularFacturacionPorViaje(cantidadViajes);
             }
-            System.out.println("Elija la opcion que desea realizar");
-            System.out.println("A - Ingresar Facturacion de una empresa");
-            System.out.println("B - Calcular Facturacion total de las empresas ingresadas");
-            selector = scanner.next();
-        }
 
+            if(facturacionMensual > facturacionMayor){
+                // nueva facturacion mas alta
+                facturacionMayor = facturacionMensual;
+                nombreEmpresaConFacturacionMasAlta = nombreEmpresa;
+            }
+
+            if(facturacionMensual != 0){
+
+            }
+            facturacionTotal =  facturacionTotal + facturacionMensual;
+
+        }
 
     }
 
+    /**
+     * Devuelve la cantidad de viajes
+     * segun la validacion del facturador
+     * @return
+     */
+    private static int ingresarResumenDeViaje() {
 
-    private static void calcularFacturacionMensualEmpresa() {
+        System.out.println("Cantidad de viajes realizados: ");
+        cantidadViajes = scanner.nextInt();
 
-        //TODO: Falta terminar, no funciona
-        float cantidadViajesAdicionales;
-        float descuento;
-        System.out.println("Ingrese el nombre de la Empresa");
-        nombreEmpresa = "Guido";
-        System.out.println("Ingrese la cantidad de viajes adicionales");
-        cantidadViajes = 10;
+        if (cantidadViajes >= 0 && cantidadViajes < VIAJES_MAXIMOS) {
+            return cantidadViajes;
+        } else {
+            return 0;
+        }
+    }
 
-        if (cantidadViajes >= 0 && cantidadViajes < VIAJES_MAXIMOS){
+    /**
+     * Devuelve importe facturado por una empresa
+     * @param cantidadViajes
+     * @return
+     */
+    private static float calcularFacturacionPorViaje(int cantidadViajes) {
+        float importe;
+        // viajes adicionales sin contar los libres
+        int viajesAdicionales = cantidadViajes - CANTIDAD_VIAJES_DIARIOS_LIBRES;
 
-            if (cantidadViajes > CANTIDAD_VIAJES_DIARIOS_LIBRES){
-                // + PRECIO BASE
-                facturacionMensual = facturacionMensual + COSTO_BASE_VIAJE_DIARIO_LIBRE;
+
+        if (viajesAdicionales > 0) {
+            importe = COSTO_BASE_VIAJE_DIARIO_LIBRE + (viajesAdicionales * COSTO_VIAJE_ADICIONAL);
+            if (viajesAdicionales > VIAJES_ADICIONALES_PARA_PROMOCIONAR) {
+                importe = (importe * DESCUENTO_PROMOCION) / 100;
             }
-
-            // Viajes adicionales neto sin contar los viajes diarios libres
-            cantidadViajesAdicionales = cantidadViajes - CANTIDAD_VIAJES_DIARIOS_LIBRES;
-
-            // + VIAJES ADICIONALES
-            facturacionMensual = (cantidadViajesAdicionales * COSTO_VIAJE_ADICIONAL);
-
-            // DESCUENTO
-            if (cantidadViajesAdicionales > VIAJES_ADICIONALES_PARA_PROMOCIONAR){
-                descuento = (facturacionMensual * DESCUENTO_PROMOCION)/100;
-                facturacionMensual = facturacionMensual - descuento;
-            }
+        } else {
+            importe = COSTO_BASE_VIAJE_DIARIO_LIBRE;
 
         }
-
-        System.out.println("La empresa: " + nombreEmpresa + " debe abonar " + facturacionMensual);
+        return importe;
     }
 }
 
