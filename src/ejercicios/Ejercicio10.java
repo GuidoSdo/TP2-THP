@@ -56,7 +56,7 @@ public class Ejercicio10 {
                     System.out.println("No existe el operador");
                     break;
             }
-            System.out.println("");
+            System.out.println(" ");
             System.out.println("Ingrese una operacion");
             System.out.println("Operadores validos: + _ - _ / _ * _ %");
             operacion = scan.next();
