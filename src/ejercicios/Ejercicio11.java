@@ -34,7 +34,8 @@ public class Ejercicio11 {
             System.out.println("Ingreso de los datos del resumen n°" + contador);
             System.out.println("Ingrese nombre de empresa: ");
             nombreEmpresa = scanner.next();
-            cantidadViajes = validarCantidadDeViaje();
+            System.out.println("Ingrese cantidad de viajes realizados: ");
+            cantidadViajes = validarCantidadDeViaje(scanner.nextInt());
 
             //facturacion
             facturacionMensual = calcularFacturacionPorViaje(cantidadViajes);
@@ -62,11 +63,8 @@ public class Ejercicio11 {
      *
      * @return
      */
-    private static int validarCantidadDeViaje() {
+    private static int validarCantidadDeViaje(int cantidadViajes) {
         boolean operacionValidada = false;
-
-        System.out.println("Ingrese cantidad de viajes realizados: ");
-        cantidadViajes = scanner.nextInt();
 
         while (operacionValidada != true) {
 
