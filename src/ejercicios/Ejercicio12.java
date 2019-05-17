@@ -2,133 +2,122 @@ package ejercicios;
 
 import java.util.Scanner;
 
+/**
+ * @author guido
+ */
 public class Ejercicio12 {
 
-    private static float codigoCliente;
-    private static int duracionLlamada;
-    private static String tipoAbono;
-    private static int contador = 0;
     private static final float MIN_NUM = 10001;
     private static final float MAX_NUM = 99999;
-    private static Scanner scanner = new Scanner(System.in);
-    private static String finalizarOperacion;
-    private static final int TIPO_A_VALOR_MINUTOS = 2;
+    private static final int TIPO_A_VALOR_MINUTOS = 2; // Abono de 2$ por minuto en Abono Tipo A
+    private static final int DURACION_MENOR_A_6 = 6;
+    private static int duracionLlamada;
+    private static int contador = 0;
+    private static int cantDuracionMenorA6Minutos = 0;
     private static float importeDeLaLlamada;
-    private static float importeRecaudadoPorTipoAbonoA;
-    private static float importeRecaudadoPorTipoAbonoB;
-    private static float importeRecaudadoPorTipoAbonoC;
-
-
+    private static float importeRecaudadoPorTipoAbonoA = 0;
+    private static float importeRecaudadoPorTipoAbonoB = 0;
+    private static float importeRecaudadoPorTipoAbonoC = 0;
+    private static float codigoCliente = 1;
     private static float duracionLlamadaMasLarga = 0;
-    private static double promedioPrecioPorLlamada;
+    private static Scanner scanner = new Scanner(System.in);
+    private static String tipoAbono;
 
     public static void main(String[] args) {
 
         System.out.println("Sistema de Consumo de clientes");
-        System.out.println(" ");
 
-        while (finalizarOperacion != "SI") {
-
-
-            System.out.println("Ingrese el codigo de cliente: ");
-            codigoCliente = validarCodigoCliente(scanner.nextFloat());
-            System.out.println("Ingrese el tipo de abono: ");
-            System.out.println("A, B o C");
-            tipoAbono = scanner.next();
-
+        while (ingresoCodigoCliente() != 0) {
+            duracionLlamada = ingresoDuracionLlamada();
+            tipoAbono = ingresoTipoAbono();
             switch (tipoAbono) {
 
                 case "A":
-                    System.out.println("Ingrese la duracion ");
-                    duracionLlamada = validarDuracionLlamada(scanner.nextInt());
                     importeDeLaLlamada = calcularImporteLlamadaTipoA(duracionLlamada);
                     importeRecaudadoPorTipoAbonoA = importeRecaudadoPorTipoAbonoA + importeDeLaLlamada;
                     contador++;
-
                     break;
 
                 case "B":
-                    System.out.println("Ingrese la duracion ");
-                    duracionLlamada = validarDuracionLlamada(scanner.nextInt());
                     importeDeLaLlamada = calcularImporteLlamadaTipoB(duracionLlamada);
                     importeRecaudadoPorTipoAbonoB = importeRecaudadoPorTipoAbonoB + importeDeLaLlamada;
                     contador++;
                     break;
                 case "C":
-                    System.out.println("Ingrese la duracion ");
-                    duracionLlamada = validarDuracionLlamada(scanner.nextInt());
                     importeDeLaLlamada = calcularImporteLlamadaTipoC(duracionLlamada);
                     importeRecaudadoPorTipoAbonoC = importeRecaudadoPorTipoAbonoC + importeDeLaLlamada;
                     contador++;
                     break;
-                default:
-                    System.out.println("El tipo de abono no existe!");
-                    System.out.println("No se pudo realizar ninguna operacion.");
-                    System.out.println("Vuelva a ingresar el tipo de abono");
-                    break;
-
             }
 
             if (duracionLlamada > duracionLlamadaMasLarga) {
                 duracionLlamadaMasLarga = duracionLlamada;
             }
+            if (duracionLlamada < DURACION_MENOR_A_6) {
+                cantDuracionMenorA6Minutos++;
+            }
             mostrarResumen(codigoCliente, tipoAbono, duracionLlamada, importeDeLaLlamada);
-            determinarOperacion();
-
-
         }
 
-        System.out.println("1.A. Importe recaudado por tipo abono A: $" + importeRecaudadoPorTipoAbonoA);
-        System.out.println("1.B. Importe recaudado por tipo abono B: $" + importeRecaudadoPorTipoAbonoB);
-        System.out.println("1.C. Importe recaudado por tipo abono C: $" + importeRecaudadoPorTipoAbonoC);
-        System.out.println("2. Cantidad minutos de la llamada mas larga: " + duracionLlamadaMasLarga + "min");
-        System.out.println("3. ");
-        System.out.println("4. El precio promedio por llamada es de: $" + ((importeRecaudadoPorTipoAbonoA + importeRecaudadoPorTipoAbonoB + importeRecaudadoPorTipoAbonoC) / contador));
+        if (contador != 0) {
+            System.out.println("1.A. Importe recaudado por tipo abono A: $" + importeRecaudadoPorTipoAbonoA);
+            System.out.println("1.B. Importe recaudado por tipo abono B: $" + importeRecaudadoPorTipoAbonoB);
+            System.out.println("1.C. Importe recaudado por tipo abono C: $" + importeRecaudadoPorTipoAbonoC);
+            System.out.println("2. Cantidad minutos de la llamada mas larga: " + duracionLlamadaMasLarga + "min");
+            System.out.println("3. Cantidad de llamadas de menos de 6 minutos: " + cantDuracionMenorA6Minutos);
+            System.out.println("4. El precio promedio por llamada es de: $" + ((importeRecaudadoPorTipoAbonoA + importeRecaudadoPorTipoAbonoB + importeRecaudadoPorTipoAbonoC) / contador));
+
+        } else {
+            System.out.println("No hubo llamadas ingresadas");
+
+        }
     }
 
 
-    private static int validarDuracionLlamada(int duracionLlamada) {
-        while (duracionLlamada <= 0) {
-
-            if (duracionLlamada <= 0) {
-                System.out.println("Vuelva a ingresar la duracion de la llamada");
-                duracionLlamada = scanner.nextInt();
-            }
+    private static int ingresoDuracionLlamada() {
+        do {
+            System.out.println("Ingrese la duracion de la llamada");
+            duracionLlamada = scanner.nextInt();
         }
+        while (duracionLlamada <= 0);
 
         return duracionLlamada;
     }
 
     /**
-     * Devuelve el codigoCliente segun la validacion de la empresa
+     * Devuelve el tipoAbono segun la validacion de la empresa
      *
-     * @param codigoCliente
      * @return
      */
-    private static float validarCodigoCliente(float codigoCliente) {
-        boolean operacionValidar = false;
+    private static String ingresoTipoAbono() {
+        do {
+            System.out.println("Ingrese el tipo de abono: ");
+            System.out.println("A, B o C");
+            tipoAbono = scanner.next();
+        } while (!(tipoAbono.equals("A") || tipoAbono.equals("B") || tipoAbono.equals("C")));
 
-        while (operacionValidar != true) {
-            contador++;
-            if (codigoCliente > MIN_NUM && codigoCliente < MAX_NUM) {
-                operacionValidar = true;
-            } else {
-                System.out.println("Ingrese un codigo que cumpla con los requisitos: ");
-                System.out.println("int de 5 num, entre 10001 y 99999, 0 = fin");
-                codigoCliente = scanner.nextInt();
-            }
+        return tipoAbono;
+    }
 
-            //TODO: ver
-            if (codigoCliente == 0) {
-                operacionValidar = true;
-            }
+    /**
+     * Devuelve el codigoCliente segun la validacion de la empresa
+     * <p>
+     * * @return
+     */
+    private static float ingresoCodigoCliente() {
+        do {
+            System.out.println(" ");
+            System.out.println("Ingrese el codigo de cliente: ");
+            System.out.println("Mayor a 10001 y menor a 9999, en caso de querer finalizar el programa: 0");
+            codigoCliente = scanner.nextInt();
         }
+        while (!(codigoCliente > MIN_NUM && codigoCliente < MAX_NUM || codigoCliente == 0));
 
         return codigoCliente;
     }
 
     /**
-     * Devuelve importe recaudado por operadora con un valor del min de $2
+     * Devuelve importe recaudado por operadora con un tipo de abono A
      *
      * @param duracionLlamada
      * @return
@@ -138,11 +127,17 @@ public class Ejercicio12 {
         return TIPO_A_VALOR_MINUTOS * duracionLlamada;
     }
 
+    /**
+     * Devuelve importe recaudado por operadora con un tipo de abono tipo B
+     *
+     * @param duracionLlamada
+     * @return
+     */
     private static float calcularImporteLlamadaTipoB(int duracionLlamada) {
         float importe = 0;
-        float COSTO_MENOR_A = 2;
-        float COSTO_MAYOR_A = 1.5f;
-        float TIEMPO = 5;
+        float COSTO_MENOR_A = 2; // Valor de costo por minuto menor a 5min
+        float COSTO_MAYOR_A = 1.5f; // Valor del costo por minuto  mayor a 5min
+        float TIEMPO = 5; // Limite de 5min
         if (duracionLlamada < TIEMPO) {
             importe = COSTO_MENOR_A * duracionLlamada;
         }
@@ -153,46 +148,41 @@ public class Ejercicio12 {
         return importe;
     }
 
-    private static float calcularImporteLlamadaTipoC(int duracionLlamada){
-        float MAXIMO_COSTO = 10;
-        float COSTO_INICIAL = 1;
+    /**
+     * Devuelve importe recaudado por operador con un tipo de abono tipo C
+     *
+     * @param duracionLlamada
+     * @return
+     */
+    private static float calcularImporteLlamadaTipoC(int duracionLlamada) {
+        float MAXIMO_COSTO = 10; // Valor maximo que puede costar el minuto
+        float COSTO_INICIAL = 1; // Valor del costo por minuto
         float importe;
-        if(duracionLlamada >= MAXIMO_COSTO){
+        if (duracionLlamada >= MAXIMO_COSTO) {
             importe = MAXIMO_COSTO;
-        } else{
-            importe = duracionLlamada *  COSTO_INICIAL;
+        } else {
+            importe = duracionLlamada * COSTO_INICIAL;
         }
         return importe;
     }
+
+    /**
+     * Formato de salida final ciclo
+     *
+     * @param codigoCliente
+     * @param tipoAbono
+     * @param duracionLlamada
+     * @param importeDeLaLlamada
+     */
     private static void mostrarResumen(float codigoCliente, String tipoAbono, float duracionLlamada, float importeDeLaLlamada) {
         System.out.println(" ");
         System.out.println("Resumen de operacion");
         System.out.println("Codigo Cliente: " + codigoCliente);
         System.out.println("Tipo de abono: " + tipoAbono);
-        System.out.println("Duracion llamada: " + duracionLlamada +"min");
+        System.out.println("Duracion llamada: " + duracionLlamada + "min");
         System.out.println("Importe por llamada: $" + importeDeLaLlamada);
+        System.out.println("-----------------------------------------------------");
     }
 
-    /**
-     * Determinar si la operacion finalizo
-     *
-     * @return respuesta afirmativa o negativa del usuario
-     */
-    private static String determinarOperacion() {
-        System.out.println(" ");
-        System.out.println("Finalizar ingresos de facturacion?");
-        System.out.println("Afirmativo: SI | Negativo: NO");
-        System.out.println(" ");
-
-        switch (finalizarOperacion = scanner.next()) {
-            case "SI":
-                finalizarOperacion = "SI";
-                break;
-            case "NO":
-                finalizarOperacion = "NO";
-                break;
-        }
-        return finalizarOperacion;
-    }
 
 }

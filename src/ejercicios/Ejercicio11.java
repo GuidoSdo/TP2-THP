@@ -34,8 +34,7 @@ public class Ejercicio11 {
             System.out.println("Ingreso de los datos del resumen n°" + contador);
             System.out.println("Ingrese nombre de empresa: ");
             nombreEmpresa = scanner.next();
-            System.out.println("Ingrese cantidad de viajes realizados: ");
-            cantidadViajes = validarCantidadDeViaje(scanner.nextInt());
+            cantidadViajes = ingresarCantidadDeViaje();
 
             //facturacion
             facturacionMensual = calcularFacturacionPorViaje(cantidadViajes);
@@ -63,18 +62,14 @@ public class Ejercicio11 {
      *
      * @return
      */
-    private static int validarCantidadDeViaje(int cantidadViajes) {
-        boolean operacionValidada = false;
-
-        while (operacionValidada != true) {
-
-            if (cantidadViajes >= 0 && cantidadViajes < VIAJES_MAXIMOS) {
-                operacionValidada = true;
-            } else {
-                System.out.println("Vuelva a ingresar una cantidad de viajes mayor/igual a 0 y menor a " + VIAJES_MAXIMOS);
-                cantidadViajes = scanner.nextInt();
-            }
+    private static int ingresarCantidadDeViaje() {
+        do{
+            System.out.println("Ingrese cantidad de viajes realizados: ");
+            System.out.println("La cantidad de viajes debe ser mayor o igual a 0 y menor a " + VIAJES_MAXIMOS);
+            cantidadViajes = scanner.nextInt();
         }
+        while (!(cantidadViajes >= 0 && cantidadViajes < VIAJES_MAXIMOS));
+
         return cantidadViajes;
 
     }
